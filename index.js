@@ -1,24 +1,68 @@
 const WebSocket = require('ws');
 
+module.exports = function () {
+  const RequestAuthorize = "RequestAuthorize";
+  const RequestGetDevices = "RequestGetDevices";
+  const RequestGetDeviceResources = "RequestGetDeviceResources";
+  const RequestSetValue = "RequestSetValue";
+  const RequestSubscribeDevice = "RequestSubscribeDevice";
+  const RequestUnsubscribeDevice = "RequestUnsubscribeDevice";
 
-module.exports = function(){
+  var callbacks = {};
+  var mid = 0;
 
+  var ws = undefined;
 
-    console.log("create");
-    const ws = new WebSocket('ws://127.0.0.1:7002/');
-
-    ws.on('open', function open() {
-        console.log("socket opened");
+  this.connect = (onConnected)=>{
+    this.ws = new WebSocket('ws://127.0.0.1:7002/');
+    this.ws.on('open', function open() {
+      onConnected();
     });
-
-    ws.on('message', function incoming(data, flags) {
-        console.log("on message", data);
+    this.ws.on('message', function incoming(data, flags) {
+      onMessage(data);
     });
+  };
 
+  send = (request, callback = undefined) => {
+    let message = {
+      "payload": request
+    };
 
-
-    this.test = function(){
-        console.log("test");
+    if (callback !== undefined) {
+      message["mid"] = mid;
+      callbacks[mid] = callback;
+      mid++;
     }
 
-} 
+    this.ws.send(JSON.stringify(message));
+  }
+
+  onMessage = (response) => {
+    let data = JSON.parse(response);
+    let mid = data.mid;
+
+    let callback = callbacks[mid];
+
+    if (callback !== undefined) {
+      callback(data.payload);
+      delete callbacks[mid];
+    }
+  }
+
+  this.getDevices = (callback) => {
+    send({
+      "request": RequestGetDevices
+    }, callback);
+  }
+
+  this.setValue = (di, variable, value) => {
+    send({"request": RequestSetValue, "di": di, "resource": variable, "value": value});
+  }
+
+  this.getValue = (di, variable, value) => {
+    send({"request": RequestGetValue, "di": di, "resource": variable});
+  }
+
+  this.exit = ()=>{
+  }
+}
