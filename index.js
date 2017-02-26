@@ -5,6 +5,7 @@ module.exports = function () {
   const RequestGetDevices = "RequestGetDevices";
   const RequestGetDeviceResources = "RequestGetDeviceResources";
   const RequestSetValue = "RequestSetValue";
+  const RequestGetValue = "RequestGetValue";
   const RequestSubscribeDevice = "RequestSubscribeDevice";
   const RequestUnsubscribeDevice = "RequestUnsubscribeDevice";
 
@@ -59,8 +60,8 @@ module.exports = function () {
     send({"request": RequestSetValue, "di": di, "resource": variable, "value": value});
   }
 
-  this.getValue = (di, variable, value) => {
-    send({"request": RequestGetValue, "di": di, "resource": variable});
+  this.getValue = (di, variable, callback) => {
+    send({"request": RequestGetValue, "di": di, "resource": variable}, callback);
   }
 
   this.exit = ()=>{
