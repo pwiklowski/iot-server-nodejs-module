@@ -3,12 +3,10 @@
   "version": "0.0.1",
   "description": "Module for using ocf iot server inside node.js scripts",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
     "ws":"2.1.0"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Pawel Wiklowski",
+  "license": "MIT",
+  "repository" : { "type" : "git", "url" : "https://github.com/pwiklowski/iot-server-nodejs-module" }
 }
