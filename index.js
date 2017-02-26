@@ -24,7 +24,7 @@ module.exports = function () {
     });
   };
 
-  send = (request, callback = undefined) => {
+  send = (request, callback) => {
     let message = {
       "payload": request
     };
