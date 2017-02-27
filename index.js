@@ -56,6 +56,18 @@ module.exports = function () {
     }, callback);
   }
 
+  this.isDeviceOnline= (deviceId, callback) => {
+    send({
+      "request": RequestGetDevices
+    }, (response)=>{
+      var found = false;
+      response.devices.forEach((device)=>{
+        if(device.id === deviceId) found = true;
+      });
+      callback(found);
+    });
+  }
+
   this.setValue = (di, variable, value) => {
     console.log("SetValue", di, variable, value);
     send({"request": RequestSetValue, "di": di, "resource": variable, "value": value});
