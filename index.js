@@ -64,7 +64,4 @@ module.exports = function () {
   this.getValue = (di, variable, callback) => {
     send({"request": RequestGetValue, "di": di, "resource": variable}, callback);
   }
-
-  this.exit = ()=>{
-  }
 }
