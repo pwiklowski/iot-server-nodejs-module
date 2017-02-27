@@ -57,6 +57,7 @@ module.exports = function () {
   }
 
   this.setValue = (di, variable, value) => {
+    console.log("SetValue", di, variable, value);
     send({"request": RequestSetValue, "di": di, "resource": variable, "value": value});
   }
 
